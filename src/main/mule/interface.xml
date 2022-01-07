@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<mule xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit-soap="http://www.mulesoft.org/schema/mule/apikit-soap" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/apikit-soap http://www.mulesoft.org/schema/mule/apikit-soap/current/mule-apikit-soap.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+    <http:listener-config name="api-httpListenerConfig">
+        <http:listener-connection host="0.0.0.0" port="8081"/>
+    </http:listener-config>
+    <apikit-soap:config httpStatusVarName="httpStatus" name="soapkit-config" port="HotelBookingSOAP" service="HotelBooking" wsdlLocation="HotelBookingTAAJ_new.wsdl"/>
+    <flow name="api-main">
+        <http:listener config-ref="api-httpListenerConfig" path="/HotelBooking/HotelBookingSOAP">
+            <http:response statusCode="#[attributes.additionalTransportData.statusCode default 200]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[attributes.protocolHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[attributes.additionalTransportData.statusCode default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[attributes.protocolHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit-soap:router config-ref="soapkit-config">
+            <apikit-soap:message>#[payload]</apikit-soap:message>
+            <apikit-soap:attributes>#[
+              %dw 2.0
+              output application/java
+              ---
+              {
+                  headers: attributes.headers,
+                  method: attributes.method,
+                  queryString: attributes.queryString
+            }]</apikit-soap:attributes>
+        </apikit-soap:router>
+    </flow>
+    <flow name="GET_Hotels:\soapkit-config">
+		<flow-ref doc:name="get_Hotels" doc:id="6cce6d45-0c85-486f-95f7-d98fe98a9e1a" name="get_Hotels"/>
+    </flow>
+    <flow name="GET_Booking:\soapkit-config">
+		<flow-ref doc:name="get_booking" doc:id="ecac85dc-1613-4660-9df2-0f6e4a604c78" name="get_booking"/>
+    </flow>
+    <flow name="ADD_Booking:\soapkit-config">
+		<flow-ref doc:name="add_booking" doc:id="56709d8a-42e1-40be-8cbe-edf35a15e1a9" name="add_booking"/>
+    </flow>
+    <flow name="DELETE_Booking:\soapkit-config">
+		<flow-ref doc:name="deleteBooking" doc:id="edc1321f-bc5e-491a-b168-608d2a15063d" name="deleteBooking"/>
+    </flow>
+</mule>
