@@ -39,7 +39,7 @@
 					</sharedLibraries>
 					<cloudHubDeployment>
 						<uri>https://anypoint.mulesoft.com</uri> 
-						<muleVersion>4.0.0</muleVersion> 
+						<muleVersion>4.4.0</muleVersion> 
 						<username>ankita_jha_2021_new</username> 
 						<password>Ankita123!@#</password>
 						<applicationName>BookHotel</applicationName>
