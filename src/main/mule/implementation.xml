@@ -6,9 +6,6 @@
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-	<db:config name="Database_Config" doc:name="Database Config" doc:id="6ac198ae-5c5e-48a3-b297-b965f9f86c76" >
-		<db:my-sql-connection host="sql6.freemysqlhosting.net" port="3306" user="sql6463789" password="KJpfTS8pVZ" database="sql6463789" />
-	</db:config>
 	<flow name="get_Hotels" doc:id="903b743e-f67d-483c-b004-f40c06e185a1" >
 		<ee:transform doc:name="Transform Message" doc:id="8aa88270-50e1-48e8-b22c-1c5953d1a7b2" >
 			<ee:message >
@@ -19,7 +16,7 @@ payload]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
 		<logger level="INFO" doc:name="Logger" doc:id="d8f92777-b588-4831-9d53-0220ff08bbfd" message="#[payload.body.GET_Hotels.City]"/>
-		<db:select doc:name="Select" doc:id="1e47cca6-4eaf-4c99-b0c5-07321dfabcd0" config-ref="Database_Config">
+		<db:select doc:name="Select" doc:id="1e47cca6-4eaf-4c99-b0c5-07321dfabcd0" config-ref="Database_Config1">
 			<db:sql ><![CDATA[SELECT * FROM Hotel_Details WHERE Location= :location]]></db:sql>
 			<db:input-parameters ><![CDATA[#[location: payload.body.GET_Hotels.City]]]></db:input-parameters>
 		</db:select>
@@ -44,6 +41,20 @@ output application/xml
 			</ee:message>
 		</ee:transform>
 		<logger level="INFO" doc:name="Logger" doc:id="b2bb4b78-2874-489d-957c-4f817b2b51e1" message="#[payload]"/>
+		<error-handler >
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="413507a0-cc4a-4476-ba24-6a6501604cee" type="DB:BAD_SQL_SYNTAX, DB:CONNECTIVITY, DB:QUERY_EXECUTION">
+				<ee:transform doc:name="Transform Message" doc:id="ff6e960f-4ee7-45f9-917b-aa49a07190f9" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"message": "database is not responding"
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</on-error-continue>
+		</error-handler>
 	</flow>
 	<flow name="get_booking" doc:id="5133a272-34f7-4f95-a5b9-7335b699df02" >
 		<ee:transform doc:name="Transform Message" doc:id="efffac5b-28fc-4d28-bee3-0601ca0f8002" >
@@ -55,7 +66,7 @@ payload]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
 		<logger level="INFO" doc:name="Logger" doc:id="d5bdd832-5c2e-4000-b2ea-2d555e13ea19" message="#[payload.body.GET_Booking.Hotel_ID]"/>
-		<db:select doc:name="Select" doc:id="ed3d4ff5-9d6a-4778-bd56-5e95703b8846" config-ref="Database_Config">
+		<db:select doc:name="Select" doc:id="ed3d4ff5-9d6a-4778-bd56-5e95703b8846" config-ref="Database_Config1">
 			<db:sql ><![CDATA[SELECT * FROM Hotel_Booking WHERE Hotel_ID= :hotel_id]]></db:sql>
 			<db:input-parameters ><![CDATA[#[hotel_id: payload.body.GET_Booking.Hotel_ID]]]></db:input-parameters>
 		</db:select>
@@ -84,6 +95,20 @@ output application/xml
 			</ee:message>
 		</ee:transform>
 		<logger level="INFO" doc:name="Logger" doc:id="9f16ca3d-f8d3-41a4-af05-3f620e611b0f" message="#[payload]"/>
+		<error-handler >
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="bf61a75c-017a-45f4-acd9-f25779a48133" type="DB:BAD_SQL_SYNTAX, DB:CONNECTIVITY, DB:QUERY_EXECUTION">
+				<ee:transform doc:name="Transform Message" doc:id="d913346f-80a4-47e7-8b32-0f9c6d4af9d0" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"message": "database is not responding"
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</on-error-continue>
+		</error-handler>
 	</flow>
 	<flow name="add_booking" doc:id="c425710d-0058-4372-94a7-bb98eb2a17e5" >
 		<ee:transform doc:name="Transform Message" doc:id="3a7ab886-cc56-4203-8291-46ba19e6b988" >
@@ -95,7 +120,7 @@ payload]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
 		<logger level="INFO" doc:name="Logger" doc:id="295f18d2-24ff-43a7-9b01-c22686e72188" message="#[payload]"/>
-		<db:insert doc:name="Insert" doc:id="df0ecb94-26a7-4f6d-af2d-0c55ff6973c5" config-ref="Database_Config">
+		<db:insert doc:name="Insert" doc:id="df0ecb94-26a7-4f6d-af2d-0c55ff6973c5" config-ref="Database_Config1">
 			<db:sql ><![CDATA[INSERT INTO Hotel_Booking (Hotel_ID, Guest_Name, Age,Gender,Check_In_Date, Check_Out_Date,Email,No_Of_Guest,Contact_No) values (:hotel_id, :guest_name, :age, :gender, :chech_in_date, :chech_out_date, :email,  :no_of_guests, :contact_number)]]></db:sql>
 			<db:input-parameters ><![CDATA[#[{
 	hotel_id: payload.body.ADD_Booking.Hotel_ID,
@@ -121,6 +146,20 @@ output application/xml
 			</ee:message>
 		</ee:transform>
 		<logger level="INFO" doc:name="Logger" doc:id="df103c23-d76a-41d8-b945-a23d19b80f3c" message="#[payload]"/>
+		<error-handler >
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="f620e46a-8ab1-48c4-98b3-701949966bbc" type="DB:BAD_SQL_SYNTAX, DB:CONNECTIVITY, DB:QUERY_EXECUTION">
+				<ee:transform doc:name="Transform Message" doc:id="057dd024-598b-40a0-9ef2-02e9f2fba999" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"message": "database is not responding"
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</on-error-continue>
+		</error-handler>
 	</flow>
 	<flow name="deleteBooking" doc:id="ccf45342-9f2e-4377-9a73-b6376ca59a56" >
 		<ee:transform doc:name="Transform Message" doc:id="95959c2f-a477-4a24-915a-05ed4ae54348" >
@@ -132,7 +171,7 @@ payload]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
 		<logger level="INFO" doc:name="Logger" doc:id="d3b9715e-8bf8-45d7-b234-0b2e36ef7a83" />
-		<db:delete doc:name="Delete" doc:id="d11216c2-54aa-45d0-ba3d-c0a8f779c46d" config-ref="Database_Config">
+		<db:delete doc:name="Delete" doc:id="d11216c2-54aa-45d0-ba3d-c0a8f779c46d" config-ref="Database_Config1">
 			<db:sql ><![CDATA[DELETE FROM Hotel_Booking WHERE Hotel_ID= :hotel_id]]></db:sql>
 			<db:input-parameters ><![CDATA[#[hotel_id: payload.body.DELETE_Booking.Hotel_ID]]]></db:input-parameters>
 		</db:delete>
@@ -147,5 +186,19 @@ output application/xml
 			</ee:message>
 		</ee:transform>
 		<logger level="INFO" doc:name="Logger" doc:id="c5af4d9c-1fcc-4ded-b7af-797504428e8b" />
+		<error-handler >
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="9b718828-af37-4a07-91a9-1731789d8887" type="DB:BAD_SQL_SYNTAX, DB:CONNECTIVITY, DB:QUERY_EXECUTION">
+				<ee:transform doc:name="Transform Message" doc:id="44d8589f-3514-435f-abe6-b003a1a51227" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"message": "database is not responding"
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</on-error-continue>
+		</error-handler>
 	</flow>
 </mule>
