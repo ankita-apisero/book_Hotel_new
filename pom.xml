@@ -42,7 +42,7 @@
 						<muleVersion>4.0.0</muleVersion> 
 						<username>ankita_jha_2021_new</username> 
 						<password>Ankita123!@#</password>
-						<applicationName>CICD-Test</applicationName>
+						<applicationName>BookHotel</applicationName>
 						<environment>Sandbox</environment>
 						<workers>1</workers>
 						<workerType>Micro</workerType> 
