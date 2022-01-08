@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="implementation-suite.xml" />
+	<munit:test name="get_booking-test" doc:id="5145fb47-3d1b-4a67-b940-29197c81e0fb" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Select" doc:id="60e1a163-e2c6-4df1-bd08-31fc6c9ff7b7" processor="db:select">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="ed3d4ff5-9d6a-4778-bd56-5e95703b8846" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/java --- readUrl('classpath://getbookingtest\mock_payload.dwl')]" mediaType="application/java" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="52e96b5f-fb92-40ff-a540-fc713e04731c" >
+				<munit:payload value="#[output application/java --- readUrl('classpath://getbookingtest\set-event_payload.dwl')]" mediaType="application/java" />
+				<munit:attributes value="#[output application/java --- readUrl('classpath://getbookingtest\set-event_attributes.dwl')]" mediaType="application/java" />
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to get_booking" doc:id="c1e02f9a-be10-42ca-bac6-2f77a22cb385" name="get_booking"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="ad837e5c-c9bb-43f2-b3ea-7a08f410456a" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import getbookingtest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+			<munit-tools:verify-call doc:name="Verify Logger" doc:id="6cfc3002-6c8d-447d-a310-e87a0a69d782" processor="logger" times="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="d5bdd832-5c2e-4000-b2ea-2d555e13ea19" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+			<munit-tools:verify-call doc:name="Verify Transform Message" doc:id="8fd5f5c2-47b1-42a2-9ceb-36cc61cf011a" processor="ee:transform" times="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="efffac5b-28fc-4d28-bee3-0601ca0f8002" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+			<munit-tools:verify-call doc:name="Verify Transform Message" doc:id="aca69769-e3b3-4e34-b9d8-683d59bacbea" processor="ee:transform" times="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="3294ee3b-8dd8-4f30-84a1-67da59600866" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+			<munit-tools:verify-call doc:name="Verify Logger" doc:id="cd387466-09af-4b83-9db9-2216b720a8f5" processor="logger" times="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="9f16ca3d-f8d3-41a4-af05-3f620e611b0f" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="get_Hotels-test1" doc:id="d82d8ad5-d08a-4e1c-8eb2-196a149fb389" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Select" doc:id="ca0ae207-53f8-4d22-86bd-2044282d3e4b" processor="db:select">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="1e47cca6-4eaf-4c99-b0c5-07321dfabcd0" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/java --- readUrl('classpath://getHotelstest1\mock_payload.dwl')]" mediaType="application/java" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="e3444da5-e2d2-41c4-a7dd-a3d4c2c93deb" >
+				<munit:payload value="#[output application/java --- readUrl('classpath://getHotelstest1\set-event_payload.dwl')]" mediaType="application/java" />
+				<munit:attributes value="#[output application/java --- readUrl('classpath://getHotelstest1\set-event_attributes.dwl')]" mediaType="application/java" />
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to get_Hotels" doc:id="d9f655d8-35e4-4b44-acce-87dce327d828" name="get_Hotels"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="91ab9828-fa1f-49aa-a577-bdc728296bed" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import getHotelstest1::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+			<munit-tools:verify-call doc:name="Verify Transform Message" doc:id="c505f9ae-5636-42d3-8df2-5fda879ec3aa" processor="ee:transform" times="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="8aa88270-50e1-48e8-b22c-1c5953d1a7b2" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+			<munit-tools:verify-call doc:name="Verify Logger" doc:id="8cdf83b5-1564-4e14-aac4-dc83af826a51" processor="logger" times="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="d8f92777-b588-4831-9d53-0220ff08bbfd" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+			<munit-tools:verify-call doc:name="Verify Transform Message" doc:id="ce821c22-aa47-492c-b91e-a8a4cba1eb8b" processor="ee:transform" times="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="20be4a7a-38b5-4900-b40a-184da2e3f6e1" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+			<munit-tools:verify-call doc:name="Verify Logger" doc:id="26122a73-f826-4824-9989-171c15063599" processor="logger" times="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="b2bb4b78-2874-489d-957c-4f817b2b51e1" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="add_booking-test" doc:id="eb1d8c9f-34c9-4f57-a3a3-220cc56a1df1" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Insert" doc:id="e7eab8e9-7961-427c-a765-43b198c97a29" processor="db:insert">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="df0ecb94-26a7-4f6d-af2d-0c55ff6973c5" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/java --- readUrl('classpath://addbookingtest\mock_payload.dwl')]" mediaType="application/java" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="de84615e-29e7-4a10-bdca-af4dcbb34063" >
+				<munit:payload value="#[output application/java --- readUrl('classpath://addbookingtest\set-event_payload.dwl')]" mediaType="application/java" />
+				<munit:attributes value="#[output application/java --- readUrl('classpath://addbookingtest\set-event_attributes.dwl')]" mediaType="application/java" />
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to add_booking" doc:id="6b5af43b-0a10-4942-8f37-dcc82390c946" name="add_booking"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="95173178-6cf7-43b4-9606-e8573d7355d0" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import addbookingtest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+			<munit-tools:verify-call doc:name="Verify Logger" doc:id="5e45f16a-1409-4f61-a5f2-0032261b9ad1" processor="logger" times="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="295f18d2-24ff-43a7-9b01-c22686e72188" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+			<munit-tools:verify-call doc:name="Verify Transform Message" doc:id="f470663d-03e7-41ab-870f-3901c0563b6c" processor="ee:transform" times="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="3a7ab886-cc56-4203-8291-46ba19e6b988" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+			<munit-tools:verify-call doc:name="Verify Logger" doc:id="3ff9de42-7dfe-42a8-a334-6e7bd8608e09" processor="logger" times="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="df103c23-d76a-41d8-b945-a23d19b80f3c" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+			<munit-tools:verify-call doc:name="Verify Transform Message" doc:id="6ac528ac-e73d-4872-9889-850c6415c1d2" processor="ee:transform" times="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="3c65842a-362b-40ff-a697-855573083b42" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>
