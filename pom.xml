@@ -37,6 +37,17 @@
 							<artifactId>mysql-connector-java</artifactId>
 						</sharedLibrary>
 					</sharedLibraries>
+					<cloudHubDeployment>
+						<uri>https://anypoint.mulesoft.com</uri> 
+						<muleVersion>4.0.0</muleVersion> 
+						<username>ankita_jha_2021_new</username> 
+						<password>Ankita123!@#</password>
+						<applicationName>CICD-Test</applicationName>
+						<environment>Sandbox</environment>
+						<workers>1</workers>
+						<workerType>Micro</workerType> 
+						<objectStoreV2>true</objectStoreV2>
+					</cloudHubDeployment>
 				</configuration>
 			</plugin>
 			<plugin>
