@@ -1,0 +1,25 @@
+pipeline {
+  agent any
+  stages {
+    stage('Build') {
+      steps {
+	         git 'https://github.com/ankita-apisero/book_Hotel_new.git'
+            bat 'mvn clean package deploy -DskipMunitTests -DmuleDeploy 
+      }
+    }
+	
+	
+	 stage('Deploy') {
+      steps {
+	         git 'https://github.com/ankita-apisero/book_Hotel_new.git'
+            bat 'mvn clean package deploy -DskipMunitTests -DmuleDeploy 
+      }
+    }
+	
+	}
+	
+}
+
+
+
+
