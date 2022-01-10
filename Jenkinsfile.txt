@@ -4,7 +4,7 @@ pipeline {
     stage('Build') {
       steps {
 	         git 'https://github.com/ankita-apisero/book_Hotel_new.git'
-            bat 'mvn clean package deploy -DskipMunitTests -DmuleDeploy 
+            bat 'mvn clean package deploy -DskipMunitTests -DmuleDeploy -DmuleVersion=4.4.0 -Dusername=ankita_jha_2021_new -Dpassword=Ankita123!@# -DapplicationName=bookmyHotel -Denvironment=Sandbox -DbusinessGroup="Apisero" -DworkerType=MICRO'
       }
     }
 	
@@ -12,7 +12,7 @@ pipeline {
 	 stage('Deploy') {
       steps {
 	         git 'https://github.com/ankita-apisero/book_Hotel_new.git'
-            bat 'mvn clean package deploy -DskipMunitTests -DmuleDeploy 
+            bat 'mvn clean package deploy -DskipMunitTests -DmuleDeploy -DmuleVersion=4.4.0 -Dusername=ankita_jha_2021_new -Dpassword=Ankita123!@# -DapplicationName=bookmyHotel -Denvironment=Sandbox -DbusinessGroup="Apisero" -DworkerType=MICRO 
       }
     }
 	
